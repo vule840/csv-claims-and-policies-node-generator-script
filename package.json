@@ -1,0 +1,24 @@
+{
+  "name": "csv-claims-and-policies-node-generator-script",
+  "version": "1.0.0",
+  "description": "A script to process CSV files in chunks, generate records using Faker.js, and save them into new CSV files.",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start:policy": "CONFIG_NAME=policy node --max-old-space-size=8192 index.js",
+    "start:claims": "CONFIG_NAME=claims node --max-old-space-size=4096 index.js",
+    "start:policy_us": "CONFIG_NAME=policy_us node --max-old-space-size=8192 index.js",
+    "start:claims_us": "CONFIG_NAME=claims_us node --max-old-space-size=8192 index.js"
+
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "csv-parser": "^3.0.0",
+    "csv-writer": "^1.6.0"
+  },
+  "devDependencies": {
+    "@faker-js/faker": "^8.4.1"
+  }
+}

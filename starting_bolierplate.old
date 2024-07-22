@@ -1,0 +1,216 @@
+import fs from 'fs';
+import { createObjectCsvWriter } from 'csv-writer';
+import { faker } from '@faker-js/faker';
+import csvParser from 'csv-parser';
+
+// Define the path to the input CSV file
+const inputCsvFilePath = 'imported_csv/input_data.csv';
+// Define the path to the CSV file
+const csvFilePath = 'exported_csv/policy_suncorp_export.csv';
+
+// Create a CSV writer
+const csvWriter = createObjectCsvWriter({
+    path: csvFilePath,
+    header: [
+      { id: 'Index Rows', title: 'Index Rows' },
+      { id: 'Policy Number*', title: 'Policy Number*' },
+      { id: 'Brand Name*', title: 'Brand Name*' },
+      { id: 'Product Class', title: 'Product Class' },
+      { id: 'Line of Business*', title: 'Line of Business*' },
+      { id: 'Policy Type*', title: 'Policy Type*' },
+      { id: 'Risk Description*', title: 'Risk Description*' },
+      { id: 'Street Number*', title: 'Street Number*' },
+      { id: 'Street Name', title: 'Street Name' },
+      { id: 'Suburb', title: 'Suburb' },
+      { id: 'Risk State*', title: 'Risk State*' },
+      { id: 'Australian Postcode*', title: 'Australian Postcode*' },
+      { id: 'GNAF', title: 'GNAF' },
+      { id: 'Premium Insured', title: 'Premium Insured' },
+      { id: 'Total Rebuild', title: 'Total Rebuild' },
+      { id: 'Year Built', title: 'Year Built' },
+      { id: 'Renewal Date', title: 'Renewal Date' },
+      { id: 'Dynamic_1', title: 'Dynamic_1' },
+      { id: 'Dynamic_2', title: 'Dynamic_2' },
+      { id: 'Dynamic_3', title: 'Dynamic_3' }
+    ]
+  });
+
+// Function to read and parse the input CSV file
+const readInputCsv = async () => {
+    return new Promise((resolve, reject) => {
+      const records = [];
+      fs.createReadStream(inputCsvFilePath)
+        .pipe(csvParser())
+        .on('data', (row) => {
+          records.push(row);
+        })
+        .on('end', () => {
+          resolve(records);
+        })
+        .on('error', (error) => {
+          reject(error);
+        });
+    });
+  };
+
+  /* const readData = async () => {
+    const data = await readInputCsv()
+    console.log(data)
+    console.log(data[0]['Address*'])
+    console.log(data[0]['gnaf'])
+
+  }
+  readData() */
+// Generate 1000 random records using faker
+
+const generateRecords = async () => {
+    try {
+      const numberOfRecords = 100; // You can change this number to generate more or fewer records
+      const records = Array.from({ length: numberOfRecords }, (_, index) => ({
+        'Index Rows': index + 1,
+        'Policy Number*': faker.string.uuid(),
+        'Brand Name*': faker.helpers.arrayElement(['Trusted Insured', 'Optimal Value', 'Rock Solid Insurance','Reliable Protection','Value Savings']),
+        'Product Class': faker.helpers.arrayElement(['Class A', 'Class B', 'Class C']),
+        'Line of Business*': faker.helpers.arrayElement(['Retail', 'Wholesale', 'Service']),
+        'Policy Type*': faker.helpers.arrayElement(['Type 1', 'Type 2', 'Type 3']),
+        'Risk Description*': faker.lorem.sentence(),
+        'Street Number*': faker.location.buildingNumber(),
+        'Street Name': faker.location.street(),
+        'Suburb': faker.location.city(),
+        'Risk State*': faker.location.state({ abbreviated: true }),
+        'Australian Postcode*': faker.location.zipCode(),
+        'GNAF': faker.string.uuid(),
+        'Premium Insured': faker.finance.amount({ min: 1000, max: 10000, dec: 2 }),
+        'Total Rebuild': faker.finance.amount({ min: 100000, max: 1000000 }),
+        'Year Built': faker.date.past({ years: 50 }).getFullYear(),
+        'Renewal Date': faker.date.future().toISOString().split('T')[0],
+        'Dynamic_1': faker.lorem.word(),
+        'Dynamic_2': faker.lorem.word(),
+        'Dynamic_3': faker.lorem.word()
+      }));
+      return records;
+    } catch (error) {
+      console.error('Error generating records:', error);
+      return [];
+    }
+  };
+  
+
+
+
+// Write records to the CSV file
+const writeCsv = async () => {
+    const records = await generateRecords();
+    //console.log(records)
+    csvWriter.writeRecords(records)
+      .then(() => {
+        console.log('CSV file was written successfully with combined data');
+      })
+      .catch((error) => {
+        console.error('Error writing to CSV file', error);
+      });
+  };
+  
+  writeCsv();
+
+
+
+
+
+
+  // Starting file
+
+
+  /* import fs from 'fs';
+import { createObjectCsvWriter } from 'csv-writer';
+import { faker } from '@faker-js/faker';
+import csvParser from 'csv-parser';
+
+// Define the path to the input CSV file
+const inputCsvFilePath = 'imported_csv/input_data.csv';
+// Define the path to the CSV file
+const csvFilePath = 'exported_csv/policy_au_export.csv';
+
+// Create a CSV writer
+const csvWriter = createObjectCsvWriter({
+  path: csvFilePath,
+  header: [
+    { id: 'gnaf', title: 'gnaf' },
+    { id: 'address', title: 'Address' },
+    { id: 'postCode', title: 'Post Code' },
+    { id: 'policyNumber', title: 'Policy Number' },
+    { id: 'brandName', title: 'Brand Name' },
+    { id: 'insuranceType', title: 'Insurance Type' },
+    { id: 'sumInsured', title: 'Sum Insured' },
+    { id: 'totalRebuild', title: 'Total Rebuild' },
+    { id: 'yearBuilt', title: 'Year Built' },
+    { id: 'renewalDate', title: 'Renewal Date' },
+    { id: 'productClass', title: 'Product class' },
+    { id: 'lineOfBusiness', title: 'Line of Business' },
+    { id: 'policyType', title: 'Policy Type' },
+    { id: 'riskDescription', title: 'Risk Description' },
+  ]
+});
+
+// Function to read and parse the input CSV file
+const readInputCsv = async () => {
+    return new Promise((resolve, reject) => {
+      const records = [];
+      fs.createReadStream(inputCsvFilePath)
+        .pipe(csvParser())
+        .on('data', (row) => {
+          records.push(row);
+        })
+        .on('end', () => {
+          resolve(records);
+        })
+        .on('error', (error) => {
+          reject(error);
+        });
+    });
+  };
+
+  
+// Generate 1000 random records using faker
+
+const generateRecords = async () => {
+    try {
+        const inputRecords = await readInputCsv();
+        const records = inputRecords.map((inputRecord, index) => ({
+          gnaf: inputRecord['gnaf'], // Assuming the column in your input CSV is named 'GNAF'
+          address: inputRecord['Address*'], // Assuming the column in your input CSV is named 'Address'
+          postCode: inputRecord['Post Code*'], // Assuming the column in your input CSV is named 'Post Code'
+          policyNumber: faker.string.uuid(),
+          brandName: faker.company.name(),
+          insuranceType: faker.helpers.arrayElement(['Home', 'Auto', 'Life', 'Health']),
+          sumInsured: faker.finance.amount({ min: 100000, max: 1000000 }),
+          totalRebuild: faker.finance.amount({ min: 100000, max: 1000000 }),
+          yearBuilt: faker.date.past({ years: 50 }).getFullYear(),
+          renewalDate: faker.date.future().toISOString().split('T')[0],
+          productClass: faker.helpers.arrayElement(['Class A', 'Class B', 'Class C']),
+          lineOfBusiness: faker.helpers.arrayElement(['Retail', 'Wholesale', 'Service']),
+          policyType: faker.helpers.arrayElement(['Type 1', 'Type 2', 'Type 3']),
+          riskDescription: faker.lorem.sentence()
+        }));
+        return records;
+      } catch (error) {
+        console.error('Error reading input CSV:', error);
+        return [];
+      };
+}
+
+
+
+// Write records to the CSV file
+const writeCsv = async () => {
+    const records = await generateRecords();
+    csvWriter.writeRecords(records)
+      .then(() => {
+        console.log('CSV file was written successfully with combined data');
+      })
+      .catch((error) => {
+        console.error('Error writing to CSV file', error);
+      });
+  };
+  
+  writeCsv(); */
