@@ -1,15 +1,27 @@
 import { faker } from '@faker-js/faker';
 
 
+
 // Extract postcode function and remove it from the address
 const extractPostcode = (address) => {
-  // AU format - 23 BOOMERANG AV, ALDINGA BEACH SA 5173
+  console.log(address);
+   // AU format - 23 BOOMERANG AV, ALDINGA BEACH SA 5173
   // Match a 4-digit AU ZIP code at the end of the string
   // US format - 6900 W Grant Ranch Blvd, Denver, CO 80123, USA or in some input csv queries the zipCode is exported already
+  // Check if the address already includes the postcode as a separate part
+  // Example: "336 MITCHELL RD, ALEXANDRIA NSW"
+  if (address.match(/(NSW|QLD|SA|VIC|WA|TAS|ACT|NT)\s*\d{4}$/)) {
+    // Return address as is with no postcode extraction needed
+    return { postcode: '', address };
+  }
+
+  // AU format - 23 BOOMERANG AV, ALDINGA BEACH SA 5173
+  // Match a 4-digit AU ZIP code at the end of the string
   const auMatches = address.match(/\b\d{4}\b(?!.*\d)/);
+
   // Match a 5-digit US ZIP code
   const usMatches = address.match(/\b\d{5}\b/);
-  
+
   let postcode = '';
   let addressWithoutPostcode = address;
 
@@ -126,7 +138,7 @@ export const policy = {
       indexRows: index + 1,
       gnaf: inputRecord['gnaf'], // Adjust as per your actual column name in input CSV
       address,
-      postCode: postcode, //inputRecord['postCode'],//
+      postCode: postcode || inputRecord['postcode'],//
       policyNumber,
       brandName: faker.helpers.arrayElement(["Value Insurance",
         "Good Value Savings",

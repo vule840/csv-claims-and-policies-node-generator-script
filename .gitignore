@@ -6,3 +6,6 @@ node_modules/
 
 # Build output
 output/
+
+# Other ignored files
+policyBrandsNumbersMap.json

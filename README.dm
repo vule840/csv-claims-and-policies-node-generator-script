@@ -93,3 +93,10 @@ WEBX-2735 - also can be used for US address, there are around 50k addresses
     "policyType": "Motor",
     "hazard": "Natural Hazard"
   },
+
+## Watch for diffrent input file address format, these are supported, if there will be diffrent format you need to adjust extractPostcode function in config.js file
+    AU
+    336 MITCHELL RD, ALEXANDRIA NSW
+    23 BOOMERANG AV, ALDINGA BEACH SA 5173
+    US
+    6900 W Grant Ranch Blvd, Denver, CO 80123
