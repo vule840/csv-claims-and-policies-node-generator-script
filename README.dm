@@ -42,9 +42,8 @@ csv-generator/
 ├── config.js
 ├── index.js
 ├── imported_csv/
-│   ├── AU-20231107-claims.csv
-│   ├── export_only_addresses.csv
-│   └── export_US_withparcels.csv
+│   ├── amfam_duplicates.csv
+│   ├── au_export_0k.csv
 ├── policyBrandsNumbersMap.json
 └── output/
     └── # generated files will be placed here

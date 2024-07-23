@@ -1,7 +1,7 @@
 import { faker } from '@faker-js/faker';
 
 
-
+// Util functions
 // Extract postcode function and remove it from the address
 const extractPostcode = (address) => {
   console.log(address);
@@ -35,6 +35,18 @@ const extractPostcode = (address) => {
 
   return { postcode, address: addressWithoutPostcode };
 };
+
+
+// Function to swap month and day
+function swapMonthAndDayForAu(dateString) {
+  // Split the date string into [year, month, day]
+  const [year, month, day] = dateString.split('-');
+
+  // Rearrange to [year, day, month]
+  const newDateString = [year, day, month].join('-');
+
+  return newDateString;
+}
 
 
 const policy_au = [
@@ -157,8 +169,8 @@ export const policy = {
       policyType,
       premiumInsured: Math.round(faker.finance.amount({ min: 500, max: 2500, decimalPlaces: 0 })),
       totalRebuild: Math.round(faker.finance.amount({ min: 10000, max: 50000, decimalPlaces: 0 })),
-      yearBuilt: faker.number.int({ min: 1950, max: 2022 }), // Adjust the year range as needed
-      renewalDate: faker.date.future().toISOString().split('T')[0],
+      yearBuilt: faker.number.int({ min: 1990, max: 2022 }), // Adjust the year range as needed
+      renewalDate: swapMonthAndDayForAu(faker.date.future().toISOString().split('T')[0]),
       //sumInsured: faker.finance.amount({ min: 10000, max: 1000000, decimalPlaces: 0 }),
       //riskDescription: faker.lorem.sentence(),
       dynamic_1: faker.helpers.arrayElement(['dynamic_1_type_1', 'dynamic_1_type_2', 'dynamic_1_type_3']),
@@ -196,7 +208,7 @@ export const claims = {
     // rule# All 3 Coverage types are actually only related to either a home or office building. So if Policy Type is Home or Commercial then Coverage Type can be Building, Building + Contents or Contents. If Policy Type is Motor, Coverage type would be null.    
     let coverageType
     if (policyType === 'Motor') {
-      coverageType = null
+      coverageType = 'NA'
     } else {
       coverageType = faker.helpers.arrayElement(['Contents', 'Building', 'Building + Contents'])
     }
@@ -260,7 +272,7 @@ export const policy_us = {
       policyType,
       premiumInsured: Math.round(faker.finance.amount({ min: 500, max: 10000, decimalPlaces: 0 })),
       totalRebuild:  Math.round(faker.finance.amount({ min: 100000, max: 1000000, decimalPlaces: 0 })),
-      yearBuilt: faker.number.int({ min: 1950, max: 2022 }),
+      yearBuilt: faker.number.int({ min: 1990, max: 2022 }),
       renewalDate: faker.date.future().toISOString().split('T')[0],
       dynamic1: faker.lorem.word(),
       dynamic2: faker.lorem.word(),
